@@ -17,9 +17,11 @@ build:
 	@cd tomcat7; docker build -t dding/tomcat7 .
 
 
-download: build
+download: 
 	@echo "Download 'sample.war'"
-	@docker run -t -i --name sample dding/fetcher https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.wa
+	@docker run -t -i --name sample \
+		dding/fetcher \
+		https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war
 
 
 start: 
@@ -36,5 +38,7 @@ stop:
 
 clean:
 	@echo "Clean Docker Image for this repository"
-	@docker rm sample_app
+	@docker rm $(shell docker ps -a -q --filter name="sample|sample_ap")
+	@echo "Clean Docker Volume"
+	@docker volume prune -f
 
